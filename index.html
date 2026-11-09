@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey Production Dashboard - กระบวนการผลิตน้ำผึ้ง</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Sukhumvit / Kanit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            950: '#451a03',
+                        },
+                        honey: {
+                            gold: '#FFB800',
+                            warm: '#E67E22',
+                            dark: '#3A2002',
+                            cream: '#FFF9EF',
+                            card: '#FFFFFF',
+                            glass: 'rgba(255, 255, 255, 0.85)'
+                        }
+                    },
+                    boxShadow: {
+                        'amber-glow': '0 10px 25px -5px rgba(245, 158, 11, 0.25), 0 8px 10px -6px rgba(245, 158, 11, 0.2)',
+                        'amber-soft': '0 4px 20px -2px rgba(217, 119, 6, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFFDF9;
+            color: #3A2002;
+        }
+        /* Custom Hexagon Background Pattern */
+        .hex-bg {
+            background-color: #fffdf9;
+            background-image: opacity: 0.05;
+            background-image:  radial-gradient(#d97706 0.75px, transparent 0.75px), radial-gradient(#d97706 0.75px, #fffdf9 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0,15px 15px;
+        }
+        .glass-nav {
+            background: rgba(255, 253, 249, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .tab-btn.active {
+            background-color: #f59e0b;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 min-h-screen flex flex-col hex-bg">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 glass-nav border-b border-amber-200/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white shadow-amber-glow text-xl">
+                        <i class="fa-solid font-bold fa-brands fa-hive"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold text-amber-950 tracking-tight block leading-none">HONEY DYNAMICS</span>
+                        <span class="text-xs text-amber-700 font-medium">คู่มือและระบบข้อมูลการผลิตน้ำผึ้ง</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-4 text-sm font-medium">
+                    <a href="#overview" class="px-3 py-2 rounded-lg text-amber-900 hover:text-amber-600 hover:bg-amber-100/50 transition">ภาพรวม</a>
+                    <a href="#methods" class="px-3 py-2 rounded-lg text-amber-900 hover:text-amber-600 hover:bg-amber-100/50 transition">3 วิธีการผลิต</a>
+                    <a href="#comparison" class="px-3 py-2 rounded-lg text-amber-900 hover:text-amber-600 hover:bg-amber-100/50 transition">ตารางเปรียบเทียบ</a>
+                    <a href="#gallery" class="px-3 py-2 rounded-lg text-amber-900 hover:text-amber-600 hover:bg-amber-100/50 transition">ภาพบรรยากาศ</a>
+                </nav>
+
+                <!-- Quick Action -->
+                <div class="flex items-center gap-3">
+                    <a href="#methods" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white text-sm font-semibold shadow-amber-glow hover:from-amber-600 hover:to-amber-700 transition active:scale-95">
+                        <i class="fa-solid fa-book-open text-xs"></i> สำรวจวิธีผลิต
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Hero Section -->
+        <section id="overview" class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-900 via-amber-800 to-amber-950 text-white shadow-2xl p-8 sm:p-12 md:p-16">
+            <div class="absolute inset-0 opacity-20 pointer-events-none">
+                <img src="https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&q=80&w=1600" alt="Honey Texture Background" class="w-full h-full object-cover">
+            </div>
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-semibold mb-6 backdrop-blur-md">
+                    <i class="fa-solid fa-sparkles text-amber-300"></i> เจาะลึกนวัตกรรมและภูมิปัญญาการผลิตน้ำผึ้ง
+                </div>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-amber-50 mb-4">
+                    กระบวนการผลิตน้ำผึ้ง <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-200">3 รูปแบบหลัก</span>
+                </h1>
+                <p class="text-amber-100/90 text-base sm:text-lg font-light leading-relaxed mb-8">
+                    ทำความเข้าใจกลไกสร้างสรรค์น้ำผึ้งบริสุทธิ์ ตั้งแต่กระบวนการชีวภาพธรรมชาติของผึ้งงานในรัง จนถึงเทคโนโลยีการสกัดระดับฟาร์มมาตรฐานและการคั้นบีบสดแบบดั้งเดิม
+                </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <a href="#methods" class="px-6 py-3 rounded-xl bg-amber-400 text-amber-950 font-bold hover:bg-amber-300 transition shadow-lg hover:shadow-amber-400/30">
+                        ดูขั้นตอนอย่างละเอียด <i class="fa-solid fa-arrow-down ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Metrics Cards -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Metric 1 -->
+            <div class="bg-white rounded-2xl p-6 border border-amber-100 shadow-amber-soft hover:shadow-md transition duration-300 relative overflow-hidden group">
+                <div class="absolute right-3 top-3 text-amber-100 group-hover:text-amber-200 transition text-5xl">
+                    <i class="fa-solid fa-droplet-degree"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600 block mb-1">ความชื้นมาตรฐาน</span>
+                <div class="text-3xl font-extrabold text-amber-950 mb-1">&lt; 18 - 20%</div>
+                <p class="text-xs text-gray-500">ระดับความชื้นเป้าหมาย เพื่อให้น้ำผึ้งข้นและไม่เน่าเสีย</p>
+            </div>
+
+            <!-- Metric 2 -->
+            <div class="bg-white rounded-2xl p-6 border border-amber-100 shadow-amber-soft hover:shadow-md transition duration-300 relative overflow-hidden group">
+                <div class="absolute right-3 top-3 text-amber-100 group-hover:text-amber-200 transition text-5xl">
+                    <i class="fa-solid fa-dna"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600 block mb-1">เอนไซม์หลัก</span>
+                <div class="text-3xl font-extrabold text-amber-950 mb-1">Invertase</div>
+                <p class="text-xs text-gray-500">ย่อยน้ำตาลซูโครสให้เป็นกลูโคสและฟรุกโตส</p>
+            </div>
+
+            <!-- Metric 3 -->
+            <div class="bg-white rounded-2xl p-6 border border-amber-100 shadow-amber-soft hover:shadow-md transition duration-300 relative overflow-hidden group">
+                <div class="absolute right-3 top-3 text-amber-100 group-hover:text-amber-200 transition text-5xl">
+                    <i class="fa-solid fa-shield-heart"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600 block mb-1">ถนอมโครงสร้างรวง</span>
+                <div class="text-3xl font-extrabold text-amber-950 mb-1">วิธีปั่นเหวี่ยง</div>
+                <p class="text-xs text-gray-500">ช่วยให้ผึ้งใช้รวงเดิมซ้ำได้โดยไม่ต้องสร้างใหม่</p>
+            </div>
+
+            <!-- Metric 4 -->
+            <div class="bg-white rounded-2xl p-6 border border-amber-100 shadow-amber-soft hover:shadow-md transition duration-300 relative overflow-hidden group">
+                <div class="absolute right-3 top-3 text-amber-100 group-hover:text-amber-200 transition text-5xl">
+                    <i class="fa-solid fa-jar"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600 block mb-1">ประเภทการสกัด</span>
+                <div class="text-3xl font-extrabold text-amber-950 mb-1">3 วิธีหลัก</div>
+                <p class="text-xs text-gray-500">ธรรมชาติ / ปั่นเหวี่ยง / คั้นบีบสด</p>
+            </div>
+        </section>
+
+        <!-- Method Section with Interactive Tabs & Cards -->
+        <section id="methods" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-amber-200 pb-5">
+                <div>
+                    <span class="text-xs font-bold text-amber-600 uppercase tracking-widest">PRODUCTION METHODS</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-950">รายละเอียด 3 วิธีการผลิตน้ำผึ้ง</h2>
+                </div>
+                <!-- Interactive Filter Tabs -->
+                <div class="inline-flex p-1.5 bg-amber-100/60 rounded-2xl border border-amber-200/80 gap-1 self-start md:self-auto">
+                    <button onclick="switchTab('all')" id="tab-all" class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200">ทั้งหมด</button>
+                    <button onclick="switchTab('natural')" id="tab-natural" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-amber-900 hover:text-amber-600 transition-all duration-200">1. วิธีธรรมชาติ</button>
+                    <button onclick="switchTab('centrifugal')" id="tab-centrifugal" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-amber-900 hover:text-amber-600 transition-all duration-200">2. ปั่นเหวี่ยง</button>
+                    <button onclick="switchTab('crush')" id="tab-crush" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-amber-900 hover:text-amber-600 transition-all duration-200">3. คั้นบีบสด</button>
+                </div>
+            </div>
+
+            <!-- Method 1: Natural Process -->
+            <div class="method-card natural-card bg-white rounded-3xl border border-amber-100 shadow-amber-soft overflow-hidden transition duration-300 hover:border-amber-300">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-5 relative min-h-[280px] lg:min-h-full">
+                        <img src="https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&q=80&w=900" alt="Natural Honeycomb" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:hidden"></div>
+                        <span class="absolute top-4 left-4 bg-amber-500 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow-md">
+                            วิธีที่ 1 : กระบวนการธรรมชาติ
+                        </span>
+                    </div>
+                    <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">01</span>
+                                <h3 class="text-xl sm:text-2xl font-bold text-amber-950">วิธีธรรมชาติ: กระบวนการทางชีวภาพของผึ้ง (Natural Biological Process)</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-600 mb-6">
+                                กระบวนการทางชีวภาพที่ผึ้งงานเปลี่ยนน้ำหวาน (Nectar) จากดอกไม้ให้กลายเป็นน้ำผึ้งบริสุทธิ์ที่เข้มข้นผ่านเอนไซม์และการควบคุมความชื้นในรัง
+                            </p>
+
+                            <!-- Timeline Steps -->
+                            <div class="space-y-4">
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-bug"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">1. การดูดและเก็บรักษาน้ำหวาน (Nectar Collection)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            ผึ้งงานดูดน้ำหวานจากดอกไม้มาเก็บใน <strong>"กระเพาะน้ำผึ้ง" (Honey Stomach)</strong> โดยเอนไซม์ <strong>อินเวอร์เทส (Invertase)</strong> ในตัวผึ้งจะเริ่มย่อยย่อยเปลี่ยนน้ำตาลซูโครส (Sucrose) ให้เป็นกลูโคสและฟรุกโตส
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-wind"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">2. การถ่ายทอดและลดความชื้น (Regurgitation & Dehydration)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            ผึ้งขย้อนส่งต่อน้ำหวานให้ผึ้งตัวอื่นทางปากซ้ำๆ เพิ่มเอนไซม์ นำใส่หลอดรวงหกเหลี่ยม แล้วร่วมกัน <strong>กระพือปีกอย่างรวดเร็ว</strong> เพื่อระเหยน้ำจนความชื้นลดลงต่ำกว่า 18-20%
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">3. การปิดผนึกรวง (Capping)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            เมื่อน้ำผึ้งงวดข้นได้ที่ตามธรรมชาติ ผึ้งจะหลั่งขี้ผึ้ง (Beeswax) จากส่วนท้องเพื่อ <strong>ปิดฝารวงน้ำผึ้ง</strong> เก็บเป็นเสบียงอาหารหลักที่สมบูรณ์
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Method 2: Centrifugal Extraction -->
+            <div class="method-card centrifugal-card bg-white rounded-3xl border border-amber-100 shadow-amber-soft overflow-hidden transition duration-300 hover:border-amber-300">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-5 relative min-h-[280px] lg:min-h-full lg:order-last">
+                        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=900" alt="Beekeeping Honey Extraction" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:hidden"></div>
+                        <span class="absolute top-4 right-4 bg-amber-600 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow-md">
+                            วิธีที่ 2 : สกัดแบบปั่นเหวี่ยง
+                        </span>
+                    </div>
+                    <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">02</span>
+                                <h3 class="text-xl sm:text-2xl font-bold text-amber-950">วิธีการสกัดแบบปั่นเหวี่ยง (Centrifugal Extraction Method)</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-600 mb-6">
+                                วิธีมาตรฐานสากลในการเลี้ยงผึ้งพันธุ์ (อุตสาหกรรมและฟาร์มมาตรฐาน) จุดเด่นคือช่วยถนอมแผ่นรวงผึ้งเดิมไว้ เพื่อให้ผึ้งกลับมาใช้ผลิตน้ำผึ้งต่อได้ทันที
+                            </p>
+
+                            <!-- Timeline Steps -->
+                            <div class="space-y-4">
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-cut"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">1. การปาดฝาขี้ผึ้ง (Uncapping)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            นำแผ่นรวงผึ้งที่ปิดผนึกเต็มที่แล้วออกจากกล่องเลี้ยง ใช้มีดร้อน (Uncapping Knife) หรือส้อมปาดฝาขี้ผึ้งที่ปิดหน้าหลอดออกอย่างเบามือ
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-rotate"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">2. การปั่นเหวี่ยง (Spinning / Extraction)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            ใส่คอนรวงผึ้งลงใน <strong>ถังปั่นน้ำผึ้ง (Honey Extractor)</strong> หมุนด้วยความเร็วสูงเพื่อใช้แรงเหวี่ยงสลัดน้ำผึ้งออกจากรวง โดยไม่ทำลายโครงสร้างรวง
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-filter"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">3. การกรองและการระเหยความชื้น (Filtering & Moisture Reduction)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            ปล่อยน้ำผึ้งผ่านตะแกรงกรองหลายชั้นแยกเศษขี้ผึ้ง นำเข้าตู้ลดความชื้น (หากจำเป็น) พักในถังตกตะกอนก่อนบรรจุลงขวด
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Method 3: Crush and Strain -->
+            <div class="method-card crush-card bg-white rounded-3xl border border-amber-100 shadow-amber-soft overflow-hidden transition duration-300 hover:border-amber-300">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-5 relative min-h-[280px] lg:min-h-full">
+                        <img src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&q=80&w=900" alt="Crush Honey Strain Method" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:hidden"></div>
+                        <span class="absolute top-4 left-4 bg-amber-700 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow-md">
+                            วิธีที่ 3 : บีบหรือคั้นสด
+                        </span>
+                    </div>
+                    <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">03</span>
+                                <h3 class="text-xl sm:text-2xl font-bold text-amber-950">วิธีการบีบหรือคั้นสด (Crush and Strain Method)</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-gray-600 mb-6">
+                                วิธีการดั้งเดิม นิยมใช้กับการเก็บน้ำผึ้งป่า ผึ้งโพรง หรือเกษตรกรระดับครัวเรือนที่ไม่ได้ใช้รวงคอนมาตรฐาน
+                            </p>
+
+                            <!-- Timeline Steps -->
+                            <div class="space-y-4">
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-700 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-scissors"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">1. การตัดและเฉือนรวง (Cutting)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            ตัดรวงน้ำผึ้งเฉพาะส่วนที่มีน้ำผึ้ง (หลีกเลี่ยงส่วนที่มีตัวอ่อนผึ้ง) นำมารวงผึ้งมาเฉือนหรือสับเป็นชิ้นเล็กๆ ลงในภาชนะสะอาด
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-700 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-hand-holding-hand"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">2. การคั้นบีบ (Crushing / Pressing)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            ใช้มือ (สวมถุงมือยางเกรดอาหาร) หรือเครื่องอัดบีบ Hydraulic/Screw Press บดคั้นรวงผึ้งเพื่อให้หลอดขี้ผึ้งแตกและปล่อยน้ำผึ้งออกมา
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-100">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-700 text-white flex-shrink-0 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-fill-drip"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-amber-900 text-sm mb-0.5">3. การกรองละเอียด (Straining)</h4>
+                                        <p class="text-xs text-gray-600 leading-relaxed">
+                                            กรองน้ำผึ้งผ่านผ้าขาวบางหรือตะแกรงความละเอียดสูงเพื่อแยกเศษขี้ผึ้งและตัวผึ้ง <em>(หมายเหตุ: รวงผึ้งจะถูกทำลายทั้งหมด ผึ้งต้องสร้างใหม่)</em>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table Section -->
+        <section id="comparison" class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="text-xs font-bold text-amber-600 uppercase tracking-widest">COMPARISON MATRIX</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-amber-950 mt-1">ตารางเปรียบเทียบ 3 วิธีการผลิต</h2>
+                <p class="text-xs sm:text-sm text-gray-600 mt-2">สรุปข้อแตกต่างด้านผู้ดำเนินการ สภาพรวงผึ้ง คุณภาพ และปริมาณผลผลิต</p>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-amber-100 shadow-amber-soft overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs sm:text-sm font-semibold uppercase tracking-wider">
+                                <th class="py-4 px-6">หัวข้อเปรียบเทียบ</th>
+                                <th class="py-4 px-6">1. วิธีธรรมชาติ (ผึ้ง)</th>
+                                <th class="py-4 px-6">2. วิธีปั่นเหวี่ยง (ฟาร์ม)</th>
+                                <th class="py-4 px-6">3. วิธีคั้นบีบสด (ดั้งเดิม)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-amber-100 text-xs sm:text-sm text-gray-700">
+                            <tr class="hover:bg-amber-50/50 transition">
+                                <td class="py-4 px-6 font-bold text-amber-950 flex items-center gap-2">
+                                    <i class="fa-solid fa-user-gear text-amber-500"></i> ผู้ดำเนินการ
+                                </td>
+                                <td class="py-4 px-6 font-medium">ตัวผึ้งในรัง</td>
+                                <td class="py-4 px-6 font-medium">เกษตรกร / โรงงาน</td>
+                                <td class="py-4 px-6 font-medium">เกษตรกร / ผู้เก็บน้ำผึ้งป่า</td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition">
+                                <td class="py-4 px-6 font-bold text-amber-950">
+                                    <i class="fa-solid fa-hexagon-nodes text-amber-500"></i> สภาพรวงผึ้ง
+                                </td>
+                                <td class="py-4 px-6">รวงสมบูรณ์ ถูกปิดฝาด้วยขี้ผึ้ง</td>
+                                <td class="py-4 px-6 text-emerald-700 font-semibold">
+                                    <i class="fa-solid fa-circle-check text-xs"></i> รวงไม่เสียหาย นำกลับมาใช้ซ้ำได้
+                                </td>
+                                <td class="py-4 px-6 text-rose-600 font-semibold">
+                                    <i class="fa-solid fa-circle-xmark text-xs"></i> รวงถูกทำลายทั้งหมด
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition">
+                                <td class="py-4 px-6 font-bold text-amber-950">
+                                    <i class="fa-solid fa-certificate text-amber-500"></i> คุณภาพน้ำผึ้ง
+                                </td>
+                                <td class="py-4 px-6">เข้มข้น บริสุทธิ์สูง</td>
+                                <td class="py-4 px-6">ใส สะอาด ปราศจากเศษรวง</td>
+                                <td class="py-4 px-6">อาจมีความชื้นหรือเกสรปะปนสูง</td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition">
+                                <td class="py-4 px-6 font-bold text-amber-950">
+                                    <i class="fa-solid fa-chart-line text-amber-500"></i> ปริมาณผลผลิต
+                                </td>
+                                <td class="py-4 px-6">ตามฤดูกาลธรรมชาติ</td>
+                                <td class="py-4 px-6 text-amber-800 font-bold">ปริมาณมาก (เหมาะกับเชิงพาณิชย์)</td>
+                                <td class="py-4 px-6">ปริมาณน้อย (ตามขนาดรวง)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Image Gallery Section -->
+        <section id="gallery" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-amber-600 uppercase tracking-widest">VISUAL GALLERY</span>
+                    <h2 class="text-2xl font-bold text-amber-950">บรรยากาศและผลิตภัณฑ์น้ำผึ้ง</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-md h-64 bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1471943311424-646960669fbc?auto=format&fit=crop&q=80&w=800" alt="Honey Dip" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
+                    <div class="absolute bottom-4 left-4 right-4 text-white">
+                        <span class="text-xs bg-amber-500 px-2.5 py-1 rounded-md font-bold mb-1 inline-block">บริสุทธิ์</span>
+                        <h4 class="font-bold text-base">น้ำผึ้งทองคำธรรมชาติ</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-md h-64 bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?auto=format&fit=crop&q=80&w=800" alt="Honeycomb detail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
+                    <div class="absolute bottom-4 left-4 right-4 text-white">
+                        <span class="text-xs bg-amber-500 px-2.5 py-1 rounded-md font-bold mb-1 inline-block">โครงสร้าง</span>
+                        <h4 class="font-bold text-base">รวงผึ้งหกเหลี่ยมปิดฝา (Capped Comb)</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-md h-64 bg-gray-100">
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800" alt="Beekeeper inspection" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
+                    <div class="absolute bottom-4 left-4 right-4 text-white">
+                        <span class="text-xs bg-amber-500 px-2.5 py-1 rounded-md font-bold mb-1 inline-block">การเก็บเกี่ยว</span>
+                        <h4 class="font-bold text-base">การตรวจเช็ครวงผึ้งในฟาร์ม</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-amber-950 text-amber-200/80 border-t border-amber-900 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-amber-950 font-bold">
+                    <i class="fa-solid fa-brands fa-hive"></i>
+                </div>
+                <span class="text-sm font-semibold text-white">Honey Dynamics Dashboard</span>
+            </div>
+            <p class="text-xs text-amber-400/70">
+                &copy; 2026 Honey Production Knowledge Base. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // Tab switching logic for filtering production methods
+        function switchTab(type) {
+            const tabs = ['all', 'natural', 'centrifugal', 'crush'];
+            const cards = document.querySelectorAll('.method-card');
+
+            // Toggle Tab Buttons active styling
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === type) {
+                    btn.classList.add('active');
+                    btn.classList.remove('text-amber-900');
+                } else {
+                    btn.classList.remove('active');
+                    btn.classList.add('text-amber-900');
+                }
+            });
+
+            // Filter cards visibility
+            cards.forEach(card => {
+                if (type === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    if (card.classList.contains(`${type}-card`)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
